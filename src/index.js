@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './modules'  // modules의 index.js라는 이름으로 rootReducer를 내보냄
+
+const store = createStore(rootReducer);
+console.log(store.getState());
+
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

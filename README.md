@@ -1,6 +1,7 @@
 ## 시작
     npx create-react-app 프로젝트이름
     yarn add redux
+    yarn add react-redux
 
 
 ## 처음 연습
