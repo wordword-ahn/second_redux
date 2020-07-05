@@ -1,68 +1,94 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 시작
+    npx create-react-app 프로젝트이름
+    yarn add redux
 
-## Available Scripts
 
-In the project directory, you can run:
+## 처음 연습
+#### 액션 타입 정의, 액션 생성 함수, 리듀서 작성, 스토어 생성
+1. 맨 처음에 exercise.js라는 파일을 만든다.
+2. index.js 파일에 import './exercise';를 추가한다.
+3. index.js 파일에서 console.log("ㅎㅇ")를 넣은 뒤 npm start로 확인해보면 잘 찍힌다는 것을 알 수 있다.
+4. 이런 식으로 파일을 연결한 뒤 작업을 시작한다.
 
-### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+        import { createStore } from 'redux';
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `yarn test`
+        // 초기값
+        const initialState = {
+            counter: 0,
+            text: '',
+            list: []
+        };
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+        // 액션 타입 정의
+        const INCREASE = 'INCREASE';
+        const DECREASE = 'DECREASE';
+        const CHANGE_TEXT = 'CHANGE_TEXT';
+        const ADD_TO_LIST = 'ADD_TO_LIST';
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+        // 액션 생성 함수
+        const increase = () => ({
+            type: INCREASE,
+        });
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        const decrease = () => ({
+            type: DECREASE,
+        });
 
-### `yarn eject`
+        const changeText = text => ({
+            type: CHANGE_TEXT,
+            text
+        });
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+        const addToList = item => ({
+            type: ADD_TO_LIST,
+            item
+        });
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+        // 리듀서 작성
+        function reducer(state = initialState, action) {
+            switch (action.type) {
+                case INCREASE:
+                    return {
+                        // 기존 상태의 counter 값을 읽어서 1을 더하고 기존 값은 유지시키고 반환
+                        ...state,
+                        counter: state.counter + 1,
+                    };
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+                case DECREASE:
+                    return {
+                        ...state,
+                        counter: state.counter - 1
+                    }
 
-## Learn More
+                    case CHANGE_TEXT:
+                        return {
+                            ...state,
+                            text: action.text
+                        }
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+                    case ADD_TO_LIST:
+                        return {
+                            ...state,
+                            list: state.list.concat(action.item)  // 기존의 list에 새로운 item을 추가한 새로운 배열을 만들어서 기존의 list를 대체시켜줌
+                        }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+                default:
+                    return state;
+            }
+        }
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+        // 스토어 생성
+        const store = createStore(reducer);
+        console.log(store.getState());
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+마지막에 store.getState()를 콘솔로 찍어보면 초기값이 잘 나온 것을 알 수 있다.
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+#
