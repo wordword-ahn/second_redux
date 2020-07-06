@@ -8,8 +8,6 @@ import { createStore } from 'redux';
 import rootReducer from './modules'  // modules의 index.js라는 이름으로 rootReducer를 내보냄
 
 const store = createStore(rootReducer);
-console.log(store.getState());
-
 
 ReactDOM.render(
   <Provider store={store}>
