@@ -12,8 +12,15 @@
 ----- 
 <br><br>
 
+## 목차
+1. modules 폴더 (파일 3개)
+2. Provider와 createStore
 
-## 기존 예제 파일 (exercise.js)
+<br><br>
+
+-----
+
+## 기본 예제 파일 (exercise.js)
 
         import { createStore } from 'redux';
 
@@ -126,8 +133,10 @@
         store.dispatch(addToList({id:1, text: 'ㅇㅇ'}));
 
 
------ 
+
 <br><br>
+
+----- 
 
 ## 1. src/modules 폴더 속 파일 3개
 
@@ -135,16 +144,12 @@
 1. 맨 처음에 src 폴더에 modules 폴더를 만든다.
 2. src/modules 폴더 안에 counter.js, todos.js 파일 2개를 만든다.
 3. src/modules 폴더 안에 index.js 파일을 만들어서 위에서 만든 파일 2개를 연결한다.      
+<br><br>
 
------
-
-<br>
 
 #### src/modules/counter.js
 
-<br>
-// 초기값
-
+        // 초기값
         const initialState = {
             number: 0,
             diff: 1
@@ -191,9 +196,7 @@
 
 #### src/modules/todos.js
 
-<br>
-// 초기값
-
+        // 초기값
         const initialState = [
 
         ];
@@ -256,12 +259,57 @@
 
         export default rootReducer;
 
+여기서 combineReducers를 사용하여 2개의 리듀서를 합치고 있다.
+<br>
 <br>
 
+-----
+
+## 2. Provider와 createStore
+
+src/index.js을 보면 아래 구간이 있다.
+
+    ReactDOM.render(	
+        <React.StrictMode>	
+            <App />	
+        </React.StrictMode>,	
+
+        document.getElementById('root')	
+    );	
+
 <br>
-<br>
-<br>
-<br>
+
+이 구간을 다음과 같이 수정해준다.
+
+    import { Provider } from 'react-redux';
+    import { createStore } from 'redux';
+    import rootReducer from './modules'  // modules의 index.js라는 이름으로 rootReducer를 내보냄
+
+    const store = createStore(rootReducer);
+    console.log(store.getState());      // 잘 되는지 확인
+
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <App />
+        </Provider>,
+        document.getElementById('root')
+    );
+
+rootReducer에서 맨 처음 작성한 modules 파일을 넣어주고 있다.
+
+<br> <br>
+
+-----
+
+## 3. 
+
+
+
+
+
+
+
 <br>
 
 ## Provider
