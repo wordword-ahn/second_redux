@@ -7,7 +7,6 @@ function TodosContainer({ todos, addTodo, toggleTodo }) {
     const onCreate = useCallback(text => addTodo(text), [addTodo]);
     const onToggle = useCallback(id => toggleTodo(id), [toggleTodo]);
     
-
     return <Todos 
         todos={todos}
         onCreate={onCreate}
