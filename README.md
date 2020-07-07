@@ -29,9 +29,9 @@ C. 리덕스 기본 예제 맛보기 <br><br>
     src/modules/counter.js      
     src/modules/todos.js        
     src/modules/index.js        
-    <br><br>
+    <br>
 
-2. Provider와 createStore
+2. Provider와 createStore       
     src/index.js <br><br>
 
 3. App.js
@@ -39,7 +39,7 @@ C. 리덕스 기본 예제 맛보기 <br><br>
 
 4. UI랑 상태관리 (components와 컨테이너)       
     src/components/Counter.js       
-    src/containers/CounterContainer.js      <br><br> 
+    src/containers/CounterContainer.js      <br><br><br>
 
 
 -----
@@ -77,15 +77,16 @@ redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로�
 <br>
 
 - containers 폴더 (컨테이너 컴포넌트)       
-리액스에 있는 상태를 조회하거나 액션을 디스패치할 수 있는 컴포넌트를 의미.
+리액스에 있는 상태를 조회하거나 액션을 디스패치할 수 있는 컴포넌트를 의미. <br><br>
 
-        src/containers/CounterContainer.js 파일
+
+    src/containers/CounterContainer.js 파일
 
         import Counter from '../components/Counter';  // 위 UI를 가져온다.
 
 <br>
 
-        // useSelector로 값 가져오기
+        // useSelector로 값 가져오기 (스토어의 현재 상태 조회)
 
         const { number, diff } = useSelector(state => ({
             number: state.counter.number,
@@ -94,7 +95,7 @@ redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로�
 
 <br>
 
-        // useDispatch로 값 바꾸기
+        // useDispatch로 값 바꾸기 (액션을 만들고 이를 디스패치)
 
         const dispatch = useDispatch();
         const onIncrease = () => dispatch(increase());
@@ -113,12 +114,12 @@ redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로�
 
 <br>
 
-- HOOK 방식의 정리
+#### 정리      
 리덕스 스토어 -> 컨테이너 컴포넌트 -> 프리젠테이셔널 컴포넌트 <br>
 프리젠테이셔널 컴포넌트는 단순히 UI만 선언하고,         
 상태관리는 컨테이너 컴포넌트에 맡긴다.      <br>
 컨테이너 컴포넌트 <- 리덕스 스토어 (스토어의 현재 상태를 줌)        
-컨테이너 컴포넌트 -> 리덕스 스토어 (액션 디스패치)
+컨테이너 컴포넌트 -> 리덕스 스토어 (액션을 만들고 이를 디스패치)
 
 <br>
 
@@ -128,6 +129,62 @@ redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로�
         <Provider store={store}>
             <App />
         </Provider>,
+
+<br><br>
+
+-----
+
+## B. HOC vs HOOK
+
+src/containers/CounterContainer.js
+
+<br>
+
+#### [HOOK의 GET, SET]
+- useSelector를 사용해서 값을 가져온다 (스토어의 현재 상태 조회)
+
+        const { number, diff } = useSelector(state => ({
+            number: state.counter.number,
+            diff: state.counter.diff
+        }))
+
+- dispatch를 사용해서 특정 액션을 발생시키기	
+
+        const dispatch = useDispatch();	
+        const onIncrease = () => dispatch(increase());  // 모듈에서 불러온다	
+        const onDecrease = () => dispatch(decrease());  // 모듈에서 불러온다	
+        const onSetDiff = diff => dispatch(setDiff(diff));
+
+<br>
+
+#### [HOC의 GET, SET]
+
+- props로 함수를 받는다.
+
+        function CounterContainer({ number, diff, increase, decrease, setDiff }) {
+
+
+- useSelect와 비슷해 
+
+        const mapStateToProps = (state) => ({
+            number: state.counter.number,
+            diff: state.counter.diff,
+        })
+
+
+- dispatch를 사용해서 특정 액션을 발생
+
+        const mapDispatchToProps = {
+            increase,
+            decrease,
+            setDiff,
+        }
+
+
+- connect를 사용한다.
+
+        export default connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
+
 
 <br><br>
 
@@ -250,7 +307,7 @@ redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로�
 <br><br>
 
 
-#### 기본 형태
+#### 소스코드의 흐름
 
 
 
