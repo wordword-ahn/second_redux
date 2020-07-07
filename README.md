@@ -1,26 +1,123 @@
-## 지난번 redux와의 차이점
-- 저번에 만든건 HOC이라는 옛날 패턴으로 connect를 사용한다.
-- HOC는 재사용되는 값, 함수를 Props로 받아올 수 있게 해주는 옛날 패턴이다.
-- 클래스형에서는 connect로만 연결이 가능하지만 함수형 컴포넌트에서는 주로 HOOK을 사용한다.
-
-
 ## 시작
     npx create-react-app 프로젝트이름
     yarn add redux
     yarn add react-redux
 
+<br>
+
+## 지난번 redux와의 차이점
+1. 저번에 만든건 HOC이라는 옛날 패턴으로, connect를 사용했다.
+2. 이번에 만든건 HOOK을 사용한다. <br><br>
+
+##### HOC
+HOC는 재사용되는 값, 함수를 Props로 받아올 수 있게 해주는 옛날 패턴이다.
+(참고로 클래스형에서는 connect로만 스토어에 연결할 수 있다)
+
+<br>
+
+##### HOOK
+함수형 컴포넌트에서 주로 쓰는 방식.     
+이 프로젝트는 이런 구조로 되어 있다.
+
+- components 폴더
+프리젠테이션 컴포넌트 : redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로만 받아와서 사용하는 컴포넌트. 주로 UI만 표현한다.
+
+        src/components/Counter.js 파일
+
+        <div>
+            <h1> {number} </h1>
+            <div>
+                <input type="number" value={diff} onChange={onChange} />
+                <button onClick={onIncrease}> + </button>
+                <button onClick={onDecrease}> - </button>
+            </div>
+        </div>
+
+<br>
+
+- containers 폴더
+컨테이너 컴포넌트 : 리액스에 있는 상태를 조회하거나 액션을 디스패치할 수 있는 컴포넌트를 의미.
+
+        src/containers/CounterContainer.js 파일
+
+        import Counter from '../components/Counter';  // 위 UI를 가져온다.
+
+<br>
+
+        // useSelector로 값 가져오기
+
+        const { number, diff } = useSelector(state => ({
+            number: state.counter.number,
+            diff: state.counter.diff
+        }))
+
+<br>
+
+        // useDispatch로 값 바꾸기
+
+        const dispatch = useDispatch();
+        const onIncrease = () => dispatch(increase());
+
+<br>
+
+        // UI 불러오기
+
+        return (
+            <Counter       
+                number={number}
+                diff={diff}          
+                onIncrease={onIncrease}
+            />
+        );
+
+<br>
+
+- HOOK 방식의 정리
+리덕스 스토어 -> 컨테이너 컴포넌트 -> 프리젠테이셔널 컴포넌트 <br>
+프리젠테이셔널 컴포넌트는 단순히 UI만 선언하고,         
+상태관리는 컨테이너 컴포넌트에 맡긴다.      <br>
+컨테이너 컴포넌트 <- 리덕스 스토어 (스토어의 현재 상태를 줌)        
+컨테이너 컴포넌트 -> 리덕스 스토어 (액션 디스패치)
+
+<br>
+
+### Provider는 HOC와 HOOK 둘 다 사용한다.
+리액트 앱에 store를 손쉽게 연동할 수 있도록 도와주는 컴포넌트
+
+        <Provider store={store}>
+            <App />
+        </Provider>,
+
 ----- 
 <br><br>
 
 ## 목차
-1. modules 폴더 (파일 3개)
+0. 리덕스 기본 예제 맛보기 <br><br>
+
+1. action과 reducers 여러개 합치기(combineReducers)
+    src/modules/counter.js      
+    src/modules/todos.js        
+    src/modules/index.js        
+    <br><br>
+
 2. Provider와 createStore
+    src/index.js <br><br>
+
+3. App.js
+<br><br>
+
+3. counter의 components와 컨테이너       
+    src/components/Counter.js       
+    src/containers/CounterContainer.js      <br><br>
+
+4. 
+
 
 <br><br>
 
 -----
 
-## 기본 예제 파일 (exercise.js)
+## 0. 기본 예제
 
         import { createStore } from 'redux';
 
@@ -136,9 +233,23 @@
 
 <br><br>
 
+
+#### 기본 형태
+
+
+
+
+
+
 ----- 
 
-## 1. src/modules 폴더 속 파일 3개
+## 1. action과 reducers 여러개 합치기
+
+    src/modules/counter.js      
+    src/modules/todos.js            
+    src/modules/index.js        
+
+<br>
 
 <전체 흐름>
 1. 맨 처음에 src 폴더에 modules 폴더를 만든다.
@@ -266,6 +377,12 @@
 -----
 
 ## 2. Provider와 createStore
+Provider란 리액트 앱에 store를 손쉽게 연동할 수 있도록 도와주는 컴포넌트이다.
+
+    src/index.js
+
+
+<br><br>
 
 src/index.js을 보면 아래 구간이 있다.
 
@@ -302,33 +419,23 @@ rootReducer에서 맨 처음 작성한 modules 파일을 넣어주고 있다.
 
 -----
 
-## 3. 
+## 3. App.js
+
+    import React from 'react';
+    import CounterContainer from './containers/CounterContainer';
+
+    function App() {
+    return (
+        <CounterContainer/>
+    );
+    }
+
+    export default App;
 
 
 
 
+<br> <br>
 
+-----
 
-
-<br>
-
-## Provider
-react-redux 라이브러리에 내장되어 있음.     
-리액트 앱에 store를 손쉽게 연동할 수 있도록 도와주는 컴포넌트
-
-
-## components 폴더
-프리젠테이션 컴포넌트 : redux 스토어에 직접 접근하지 않고 필요한 값/함수를 props로만 받아와서 사용하는 컴포넌트. 주로 UI만 표현한다.
-
-
-## containers 폴더
-컨테이너 컴포넌트란 리액스에 있는 상태를 조회하거나 액션을 디스패치할 수 있는 컴포넌트를 의미.
-
-
-## 정리
-#### 리덕스 스토어 -> 컨테이너 컴포넌트 -> 프리젠테이셔널 컴포넌트
-프리젠테이셔널 컴포넌트는 단순히 UI만 선언하고,         
-상태관리는 컨테이너 컴포넌트에 맡긴다.      
-
-컨테이너 컴포넌트 <- 리덕스 스토어 (스토어의 현재 상태를 줌)
-컨테이너 컴포넌트 -> 리덕스 스토어 (액션 디스패치)
