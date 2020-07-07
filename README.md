@@ -1,3 +1,8 @@
+## 지난번 redux와의 차이점
+- 저번에 만든건 HOC이라는 옛날 패턴으로 connect를 사용한다. 클래스형에서는 connect로만 연결이 가능함.
+- HOC: 재사용되는 값, 함수를 Props로 받아올 수 있게 해주는 옛날 패턴. 그러나 이제는 HOOK이 이 자리를 대체한 상황.
+
+
 ## 시작
     npx create-react-app 프로젝트이름
     yarn add redux
